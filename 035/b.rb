@@ -5,26 +5,20 @@ t = STDIN.gets
 
 class Drone
   def self.exec(s, t)
-    x = y = hatena = 0
-    s.split(//).each do |c|
-      case c
-      when 'L' then x -= 1
-      when 'R' then x += 1
-      when 'U' then y += 1
-      when 'D' then y -= 1
-      when '?' then hatena += 1
-      end
-    end
+    count_l = s.count("L")
+    count_r = s.count("R")
+    count_u = s.count("U")
+    count_d = s.count("D")
+    distance = (count_l - count_r).abs + (count_u - count_d).abs
 
-    distance = x.abs + y.abs
-
+    count_hatena = s.count("?")
     if t.to_i == 1
-      distance + hatena
+      distance + count_hatena
     else
-      if distance >= hatena
-        distance - hatena
+      if distance >= count_hatena
+        distance - count_hatena
       else
-        if (distance - hatena) % 2 == 0
+        if (distance - count_hatena).abs.even?
           0
         else
           1
