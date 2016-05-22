@@ -3,19 +3,20 @@
 num, _ = STDIN.gets.split.map(&:to_i)
 
 class Othello
-  attr_reader :s
   def initialize(n)
-    @s = "0" * n
+    @s = 0
+    @n = n
   end
 
   def reverse(left, right)
-    l = left.to_i - 1
-    r = right.to_i - 1
-    before = l > 0 ? @s.slice(0..l-1) : ""
-    after  = @s.slice(r+1..@s.length)
-    target = @s.slice(l..r).split(//).map{|s| s.to_i == 0 ? "1" : "0" }.join("")
+    num = right.to_i - left.to_i
+    re = ("1" * (num+1)).to_i(2)
+    @s ^= re << (left.to_i - 1)
+  end
 
-    @s = "#{before}#{target}#{after}"
+  def to_s
+    s = @s.to_s(2)
+    ("0" * (@n - s.length) + s).reverse
   end
 end
 
@@ -26,4 +27,4 @@ STDIN.each do |line|
   o.reverse(l, r)
 end
 
-puts o.s
+puts o.to_s
