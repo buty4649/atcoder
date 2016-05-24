@@ -9,9 +9,9 @@ class Othello
   end
 
   def reverse(left, right)
-    num = right.to_i - left.to_i
-    re = ("1" * (num+1)).to_i(2)
-    @s ^= re << (left.to_i - 1)
+    num = right - left
+    re = (1 << (num + 1)) -1
+    @s ^= re << (left - 1)
   end
 
   def to_s
@@ -24,7 +24,7 @@ o = Othello.new(num)
 
 STDIN.each do |line|
   l, r = line.split
-  o.reverse(l, r)
+  o.reverse(l.to_i, r.to_i)
 end
 
 puts o.to_s
