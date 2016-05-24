@@ -4,19 +4,22 @@ num, _ = STDIN.gets.split.map(&:to_i)
 
 class Othello
   def initialize(n)
-    @s = 0
     @n = n
+    @board = Array.new(n+2, 0)
   end
 
   def reverse(left, right)
-    num = right - left
-    re = (1 << (num + 1)) -1
-    @s ^= re << (left - 1)
+    @board[left]   += 1
+    @board[right+1]-= 1
   end
 
   def to_s
-    s = @s.to_s(2)
-    ("0" * (@n - s.length) + s).reverse
+    answer = ""
+    (1..@n).each do |i|
+      @board[i] += @board[i-1]
+      answer <<= @board[i].even? ? "0" : "1"
+    end
+    answer
   end
 end
 
