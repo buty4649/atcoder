@@ -1,7 +1,9 @@
 n, _q = gets.split.map(&:to_i)
 
 waiting = 1
-reception = {}
+reception = [true] * (n + 1)
+reception[0] = false
+not_go = 1
 
 while line = gets&.chomp
   (event, x) = line.split.map(&:to_i)
@@ -12,8 +14,9 @@ while line = gets&.chomp
     reception[waiting] = true
     waiting += 1
   when 2
-    reception.delete(x)
+    reception[x] = false
   when 3
-    puts reception.first.first
+    not_go += 1 until reception[not_go]
+    puts not_go
   end
 end
