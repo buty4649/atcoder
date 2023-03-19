@@ -1,3 +1,5 @@
+require "readline"
+
 Dir.chdir(Rake.application.original_dir)
 
 desc "Run the tests"
@@ -16,4 +18,20 @@ task :test do
       puts "-----------------"
     end
   end
+end
+
+desc "Submit"
+task :submit do
+  sh "acc submit main.rb"
+end
+
+desc "New"
+task :new do
+  contest_id = Readline.readline("Contest ID(abcXXX): ")
+  sh "acc new #{contest_id}"
+end
+
+desc "Add"
+task :add do
+  sh "acc add"
 end
