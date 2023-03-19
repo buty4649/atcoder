@@ -1,21 +1,18 @@
-require 'prime'
-
 n = gets.to_i
+memo = Array.new(n+1, 0)
+
+(1..n).each do |i|
+  
+end
 
 def count(num)
-  memo = Hash.new
-  memo[1] = 1
-
   result = 0
-  (1...num).each do |i|
-    (1...num).each do |j|
-      if i + j == num
-        memo[i] = i.prime_division.count unless memo[i]
-        memo[j] = j.prime_division.count unless memo[j]
+  memo = Hash.new
 
-        result += memo[i] + memo[j]
-      end
-    end
+  (1..num).each do |i|
+    x = memo[i] ||= divisor(i)
+    y = memo[num - i] ||= divisor(num - i)
+    result += x * y
   end
 
   result
