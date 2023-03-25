@@ -1,23 +1,7 @@
-n, m = gets.split.map(&:to_i)
+_nm = gets
 a = gets.split.map(&:to_i)
 b = gets.split.map(&:to_i)
+c = (a + b).sort.each_with_index.to_h
 
-result_a = []
-result_b = []
-
-(1..(n+m)).each do |i|
-  if a.empty?
-    result_b << i
-  elsif b.empty?
-    result_a << i
-  elsif a.first < b.first
-    result_a << i
-    a.shift
-  else
-    result_b << i
-    b.shift
-  end
-end
-
-puts result_a.join(' ')
-puts result_b.join(' ')
+puts a.map{|aa| c[aa] + 1}.join(" ")
+puts b.map{|bb| c[bb] + 1}.join(" ")

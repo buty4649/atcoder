@@ -60,7 +60,12 @@
       "id": "abc294_f",
       "label": "F",
       "title": "Sugar Water 2",
-      "url": "https://atcoder.jp/contests/abc294/tasks/abc294_f"
+      "url": "https://atcoder.jp/contests/abc294/tasks/abc294_f",
+      "directory": {
+        "path": "f",
+        "testdir": "tests",
+        "submit": "main.rb"
+      }
     },
     {
       "id": "abc294_g",
