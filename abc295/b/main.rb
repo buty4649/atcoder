@@ -18,25 +18,20 @@ r.times.each_with_index do |i|
   end
 end
 
-def do_bomb(map, power, i, j)
-  # 原点を爆発
-  map[i][j] = '.'
-
-  # 左右を爆発させる
-  power.times do |k|
-    n = j - k - 1 # 0始まり
-    map[i][n] = '.' if n >= 0
-
-    n = j + k + 1 # 0始まり
-    map[i][n] = '.' unless map[i][n].nil?
-  end
-end
-
 bomb.each do |(power, i, j)|
-  (0..power).each do |k|
-    do_bomb(map, power - k, i - k, j) if i - k >= 0
-    do_bomb(map, power - k, i + k, j) if i + k < r
+  (i - power .. i + power).each do |k|
+    next if k < 0
+    break if k >= r
+
+    (j - power .. j + power).each do |l|
+      next if l < 0
+      break if l >= c
+
+      if (k - i).abs + (l - j).abs <= power
+        map[k][l] = '.'
+      end
+    end
   end
 end
 
-puts map.map {|m| m.join}.join("\n")
+puts map.map(&:join).join("\n")
