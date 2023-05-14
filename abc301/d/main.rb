@@ -12,14 +12,13 @@ if answer > n
   exit
 end
 
-# ?を0に置き換えながらn未満の最大値を探す
-loop do
-  answer = s.gsub('?', '1').to_i(2)
-  if answer <= n
-    puts answer
-    break
+# ?を1に置き換えながらn以下の最大値を探す
+result = s.chars.each_with_index.inject(answer) do |sum, (c, i)|
+  if c != '?' || (sum | 1 << (s.size - i - 1)) > n
+    sum
+  else
+    sum | 1 << (s.size - i - 1)
   end
-
-  # 先頭の?を0に変えて次へ
-  s.sub!('?', '0')
 end
+
+puts result
