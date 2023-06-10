@@ -31,6 +31,8 @@ a.each_cons(2) do |(prev_x, next_x)|
   b.each_cons(2) do |(prev_y, next_y)|
     count = 0
     (prev_x...next_x).each do |x|
+      next unless strawberries[x]
+
       (prev_y...next_y).each do |y|
         count += 1 if strawberries.dig(x, y)
       end
