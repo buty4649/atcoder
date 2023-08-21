@@ -2,25 +2,28 @@
 
 n, m = gets.split.map(&:to_i)
 
-# 大きい順に累積和を取っておく
-a = gets.split.map(&:to_i).tally.sort.to_a
-(a.size - 1).times do |i|
-  a[i + 1][1] = a[i][1] + a[i + 1][1]
+# https://aruma256.github.io/blog/2023/08/05/abc312-c.html
+events = [] # [代金, 売り手の変化, 買い手の変化]
+
+# seller
+gets.chomp.split(/ /).map(&:to_i).each do |x|
+  events << [x, 1, 0]
 end
 
-# 小さい順に累積和を取っておく
-b = gets.split.map(&:to_i).tally.sort.reverse.to_a
-(b.size - 1).times do |i|
-  b[i + 1][1] = b[i][1] + b[i + 1][1]
+# buyer
+gets.chomp.split(/ /).map(&:to_i).each do |y|
+  events << [y+1, 0, -1]
 end
 
-a.reverse!
-pp({a:a, b:b})
+seller = 0
+buyer = m
 
-answer = 10**9
-
-b.each do |value, count|
-  buyer = a.find { |v, c| value >= v && count >= c }
-
-  pp buyer
+events.sort.each do |event|
+  price, seller_change, buyer_change = event
+  seller += seller_change
+  buyer += buyer_change
+  if seller >= buyer
+    puts price
+    exit
+  end
 end
