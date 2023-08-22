@@ -1,15 +1,14 @@
 split("\n") | map(select(. != "")) as $input |
 $input[0] | tonumber as $N |
-$input[1:] | map(split(" ") | map(tonumber)) as $FS |
 
-# フレーバーごとに点数を集める
-def group_by_flavors: group_by(.[0]) | map([.[][1]] | sort | reverse);
-$FS | group_by_flavors as $flavors |
-
-# 同じフレーバーで組み合わせたときの最大点数
-$flavors | map(select(length > 1) | .[0] + .[1] / 2) | max as $same_score |
-
-# 別のフレーバーで組み合わせたときの最大点数
-$flavors | map(max) | sort | .[-2:] | add as $diff_score |
-
-[$same_score, $diff_score] | max
+# 解説の別解を参考 https://atcoder.jp/contests/abc315/editorial/6995
+[range(0;$N)] | map(
+    [.] + ($input[.+1] | split(" ") | map(tonumber))
+) as $items |
+$items | max_by(.[2]) as $max |
+$items | map(
+    if .[0] == $max[0] then 0
+    elif .[1] == $max[1] then .[2] / 2 + $max[2]
+    else .[2] + $max[2]
+    end
+) | max
