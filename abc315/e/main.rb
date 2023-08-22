@@ -1,37 +1,28 @@
+if !ENV['RUBY_THREAD_VM_STACK_SIZE']
+    RUBY=Gem.ruby
+    exec({'RUBY_THREAD_VM_STACK_SIZE'=>'100000000'},RUBY,$0) #100MB
+end
+
 n = gets.to_i
+s = Set.new
+s << 1
 
-# 本情報, 0は終端
-books = [[]]
-n.times do |i|
-  indexes = gets.chomp.split(" ").map(&:to_i)
-  if indexes.first.zero?
-    books[0] << i + 1
-  else
-    indexes[1..].each do |index|
-      books[index] ||= []
-      books[index] << i + 1
-    end
+books = n.times.map do |i|
+  book = gets.chomp.split(' ').map(&:to_i)[1..]
+  next unless s.include?(i+1)
+  s += book if book
+  [i + 1, book]
+end.compact.to_h
+
+require 'tsort'
+class Hash
+  include TSort
+  alias tsort_each_node each_key
+  def tsort_each_child(node, &block)
+    fetch(node).each(&block)
   end
 end
 
-class Resolver
-  def initialize
-    @answer = []
-  end
-
-  def resolve(books, index)
-    return @answer if books[index].nil?
-
-    books[index].each do |book|
-      @answer << book
-      resolve(books, book)
-    end
-    @answer
-  end
-
-  def answer(books)
-    resolve(books, 0)
-  end
-end
-
-puts Resolver.new.answer(books)
+answer = books.tsort
+answer.delete(1)
+puts answer.join(' ')
