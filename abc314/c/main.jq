@@ -1,6 +1,6 @@
 split("\n")[0:-1] as $input |
 $input[1] | split("") as $S |
-$input[2] | split(" ") | map(tonumber) as $C |
+$input[2] | split(" ") as $C |
 
 # 色ごとに出現位置と文字列をマッピングする
 $C | unique | map(
