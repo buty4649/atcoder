@@ -15,15 +15,14 @@ $C | unique | map(
     [range(0; $indices | length)] | map(
         . as $i |
         $chars | length as $len |
-        [
-            $indices[$i],
-            $chars[($i - 1 + $len) % $len]
-        ]
+
+        # sort_byが遅いのでindexを先頭につけて文字列にする
+        $indices[$i] | tostring + "_" + $chars[($i - 1 + $len) % $len]
     ) | .[]
 ) |
 
 # 出現位置でソート
-sort_by(.[0]) |
+sort |
 
-# 文字列を結合
-map(.[1]) | join("")
+# 文字部分だけ切り出す
+map(split("_")[1]) | join("")
