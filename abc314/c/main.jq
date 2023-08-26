@@ -10,19 +10,23 @@ $C | unique | map(
     # 色の出現位置に対応する文字列
     $indices | map($S[.]) as $chars |
 
-    # 出現位置と対応文字列を配列にする
-    # 対応文字列は右巡回シフトする
-    [range(0; $indices | length)] | map(
-        . as $i |
-        $chars | length as $len |
+    {
+        key: $color,
+        value: {
+            indices: $indices,
+            chars: ([$chars[-1]] + $chars[0:-1])
+        }
+    }
+) | from_entries as $color_map |
 
-        # sort_byが遅いのでindexを先頭につけて文字列にする
-        $indices[$i] | tostring + "_" + $chars[($i - 1 + $len) % $len]
-    ) | .[]
-) |
+# 文字列を生成する
+[range(0; $S | length)] | map(
+    . as $i |
+    $C[$i] as $color |
 
-# 出現位置でソート
-sort |
+    # 今の位置の色の出現位置を検索
+    $color_map[$color].indices | index($i) as $index |
 
-# 文字部分だけ切り出す
-map(split("_")[1]) | join("")
+    # 右巡回シフトした文字を出力
+    $color_map[$color].chars[$index]
+) | join("")
