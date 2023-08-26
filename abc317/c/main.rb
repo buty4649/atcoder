@@ -2,38 +2,38 @@
 
 n,m = gets.split.map(&:to_i)
 
-map = {}
+map = Array.new(11) { Array.new(11, 0) }
 m.times do
   a,b,c = gets.split.map(&:to_i)
-  map[a] ||= []
-  map[a] << {next: b, cost: c}
-
-  # 逆方向
-  map[b] ||= []
-  map[b] << {next: a, cost: c}
+  map[a][b] = c
+  map[b][a] = c
 end
 
-def resolv(town, cost, map, check)
-  return cost unless map[town]
+class Resolver
+  def initialize(map)
+    @map = map
+    @answer = 0
+    @check = [false] * 11
+  end
 
-  check[town] = true
-  map[town].map do |m|
-    next cost if check[m[:next]]
-    resolv(m[:next], cost + m[:cost], map, check.dup)
-  end.max
+  def answer
+    (1..10).each do |i|
+      resolv(i, 0)
+    end
+    @answer
+  end
+
+  def resolv(town, cost)
+    @answer = cost if cost > @answer
+
+    @check[town] = true
+    (1..10).each do |i|
+      next if @check[i] || @map[town][i] == 0
+
+      resolv(i, cost + @map[town][i])
+    end
+    @check[town] = false
+  end
 end
 
-cache = {}
-
-answer = map.keys.map do |town|
-  cache[town] ||= {}
-  map[town].map do |m|
-    next cache[town][m[:next]] if cache[town][m[:next]]
-    check = {}
-    check[town] = true
-    check[m[:next]] = true
-    cache[town][m[:next]] = resolv(m[:next], m[:cost], map, check)
-  end.max
-end.max
-
-puts answer
+puts Resolver.new(map).answer
