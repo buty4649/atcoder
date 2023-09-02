@@ -2,10 +2,10 @@
 
 n = gets.to_i
 
-sheets = Array.new
+sheets = []
 answer = 0
 
-n.times do |i|
+n.times do |_i|
   a, b, c, d = gets.split.map(&:to_i)
 
   (c...d).each do |y|
