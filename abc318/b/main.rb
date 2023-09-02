@@ -2,16 +2,19 @@
 
 n = gets.to_i
 
-filed = Array.new(100) { Array.new(100, false) }
+sheets = Array.new
+answer = 0
 
-n.times do
-  a,b,c,d = gets.split.map(&:to_i)
+n.times do |i|
+  a, b, c, d = gets.split.map(&:to_i)
 
-  (a..b).each do |x|
-    (c..d).each do |y|
-      filed[x][y] = true
+  (c...d).each do |y|
+    sheets[y] ||= []
+    (a...b).each do |x|
+      answer += 1 unless sheets[y][x]
+      sheets[y][x] = true
     end
   end
 end
 
-puts filed.flatten.count(true)
+puts answer
